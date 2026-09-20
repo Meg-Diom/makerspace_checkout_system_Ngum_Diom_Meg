@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS equipment (
 );
 """)
 
-cursor.execute ("""
+cursor.execute("""
 CREATE TABLE IF NOT EXISTS loans (
     loan_id INTEGER PRIMARY KEY,
     checkout_date TEXT,
@@ -75,13 +75,6 @@ def update_member(member):
     connection.commit()
     print("Member details updated successfully!")
 
-def delete_member(member):
-    cursor.execute("""
-        DELETE FROM members WHERE member_id = ?
-    """, (member.member_id,))
-    connection.commit()
-    print("Member deleted successfully!")
-
 def add_equipment(equipment):
     try:
         cursor.execute("""
@@ -96,7 +89,7 @@ def add_equipment(equipment):
 def get_equipment():
     equipment_objects = []
     cursor.execute("""
-        Select * FROM equipment
+        SELECT * FROM equipment
     """)
     equipment = cursor.fetchall()
     for tool in equipment:
@@ -111,13 +104,6 @@ def update_equipment(equipment):
     """, (equipment.equipment_name, equipment.status, equipment.equipment_id))
     connection.commit()
     print("Equipment details updated successfully!")
-
-def delete_equipment(equipment):
-    cursor.execute("""
-        DELETE FROM equipment WHERE equipment_id = ?
-    """, (equipment.equipment_id,))
-    connection.commit()
-    print("Equipment successfully deleted!")
 
 
 def add_loan(loan):
@@ -167,16 +153,6 @@ def update_loan(loan):
 
     print("Loan updated successfully!")
 
-def delete_loan(loan):
-    cursor.execute("""
-        DELETE FROM loans
-        WHERE loan_id = ?
-    """, (loan.loan_id,))
-
-    connection.commit()
-
-    print("Loan deleted successfully!")
-
 def get_next_loan_id():
     cursor.execute("""
         SELECT MAX(loan_id)
@@ -223,8 +199,7 @@ def get_loan_by_id(loan_id):
         loan_object.return_date = (datetime.fromisoformat(return_date) if return_date else None)
         loan_object.status = status
         return loan_object
-    else:
-        return None
+    return None
     
 def search_equipment(search_term):
     cursor.execute("""
@@ -246,7 +221,7 @@ def currently_borrowed_equipments():
         WHERE l.status = 'Active'
     """)
     equipment = cursor.fetchall()
-    equipment_list =[]
+    equipment_list = []
     for tool in equipment:
         equipment_id, equipment_name, status = tool
         equipment_object = Equipment(equipment_id, equipment_name, status)
@@ -266,9 +241,5 @@ def loan_history():
     for loan in loans:
         loan_id, member_name, equipment_name, checkout_date, return_date, status = loan
         print(f"Loan ID: {loan_id}\nMember Name: {member_name}\nEquipment Name: {equipment_name}\nCheckout Date: {checkout_date}\nReturn Date: {return_date}\nStatus: {status}")
-        print(f"{40*"_"}")
+        print(f40*"_")
 
-
-if __name__ == "__main__":
-
-    pass

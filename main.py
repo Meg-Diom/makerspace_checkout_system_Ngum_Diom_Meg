@@ -53,25 +53,24 @@ def return_equipment():
             break
         except ValueError:
             print("Please enter a number!")
-            continue
 
     loan = get_loan_by_id(loan_id)
 
     if not loan:
         print("Loan does not exist!")
         return
-    else:
-        equipment = get_equipment_by_id(loan.equipment_id)
-        result = loan.return_equipment(equipment)
-        if result:
-            update_loan(loan)
-            update_equipment(equipment)
+    
+    equipment = get_equipment_by_id(loan.equipment_id)
+    result = loan.return_equipment(equipment)
+    if result:
+        update_loan(loan)
+        update_equipment(equipment)
 
 def search():
     search_term = input("Enter equipment name to search: ").strip()
     results = search_equipment(search_term)
     if not results:
-            print("Equipment not found!")
+        print("Equipment not found!")
     else:
         for result in results:
             result.display_info()
