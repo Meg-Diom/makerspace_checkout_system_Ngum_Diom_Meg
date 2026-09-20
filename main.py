@@ -190,9 +190,9 @@ def validate_email(email):
 def main():
     try:
         while True:
-            print(60*"=")
-            print("\t\tMAKERSPACE CHECKOUT SYSTEM")
-            print(60*"=")
+            print(40*"=")
+            print("\tMAKERSPACE CHECKOUT SYSTEM")
+            print(40*"=")
             print("1. Register member\n2. List members\n3. Update member\n4. Register equipment")
             print("5. List equipment\n6. Checkout equipment")
             print("7. Return equipment\n8. Search equipment\n9. Currently borrowed equipments\n10. Loan history\n11. Exit")
@@ -223,6 +223,7 @@ def main():
             elif choice == 10:
                 loan_history()
             elif choice == 11:
+                print("Thank you for using our services!")
                 break
             else:
                 print("Invalid input!")

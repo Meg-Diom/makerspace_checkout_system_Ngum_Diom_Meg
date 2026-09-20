@@ -241,5 +241,5 @@ def loan_history():
     for loan in loans:
         loan_id, member_name, equipment_name, checkout_date, return_date, status = loan
         print(f"Loan ID: {loan_id}\nMember Name: {member_name}\nEquipment Name: {equipment_name}\nCheckout Date: {checkout_date}\nReturn Date: {return_date}\nStatus: {status}")
-        print(f40*"_")
+        print(40*"_")
 
