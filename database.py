@@ -75,6 +75,22 @@ def update_member(member):
     connection.commit()
     print("Member details updated successfully!")
 
+def search_member(search_term):
+    cursor.execute("""
+        SELECT * FROM members
+        WHERE member_name LIKE ?
+    """, (f"%{search_term}%",))
+
+    members = cursor.fetchall()
+    member_list = []
+
+    for member in members:
+        member_id, member_name, email = member
+        member_object = Member(member_id, member_name, email)
+        member_list.append(member_object)
+
+    return member_list
+
 def add_equipment(equipment):
     try:
         cursor.execute("""
@@ -242,4 +258,52 @@ def loan_history():
         loan_id, member_name, equipment_name, checkout_date, return_date, status = loan
         print(f"Loan ID: {loan_id}\nMember Name: {member_name}\nEquipment Name: {equipment_name}\nCheckout Date: {checkout_date}\nReturn Date: {return_date}\nStatus: {status}")
         print(40*"_")
+
+def clear_history():
+    confirmation = input(
+        "Are you sure you want to clear all loan history? (yes/no): "
+    ).strip().lower()
+
+    if confirmation == "yes":
+        cursor.execute("""
+            DELETE FROM loans
+            WHERE status = 'Returned'
+        """)
+        connection.commit()
+        print("Loan history cleared successfully!")
+
+    else:
+        print("Loan history was not cleared.")
+
+def search_loan_by_member(member_id):
+    cursor.execute("""
+        SELECT l.loan_id, l.checkout_date, l.return_date,
+               l.status, l.member_id, l.equipment_id
+        FROM loans AS l
+        WHERE l.member_id = ?
+    """, (member_id,))
+
+    loans = cursor.fetchall()
+    loan_list = []
+
+    for loan in loans:
+        loan_id, checkout_date, return_date, status, member_id, equipment_id = loan
+
+        loan_object = Loan(loan_id, member_id, equipment_id)
+
+        loan_object.checkout_date = (
+            datetime.fromisoformat(checkout_date)
+            if checkout_date else None
+        )
+
+        loan_object.return_date = (
+            datetime.fromisoformat(return_date)
+            if return_date else None
+        )
+
+        loan_object.status = status
+
+        loan_list.append(loan_object)
+
+    return loan_list
 

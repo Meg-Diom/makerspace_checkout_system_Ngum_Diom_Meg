@@ -75,6 +75,50 @@ def search():
         for result in results:
             result.display_info()
 
+def search_member_menu():
+    search_term = input("Enter member name to search: ").strip()
+
+    results = search_member(search_term)
+
+    if not results:
+        print("Member not found!")
+    else:
+        for member in results:
+            print(f"Member ID: {member.member_id}")
+            member.display_info()
+            print(40 * "_")
+
+def search_loan_member():
+    while True:
+        try:
+            member_id = int(input("Enter member ID: "))
+            break
+        except ValueError:
+            print("Please enter a number!")
+
+    member = get_member_by_id(member_id)
+
+    if not member:
+        print("Member not found!")
+        return
+
+    loans = search_loan_by_member(member_id)
+
+    if not loans:
+        print("This member has no loan history!")
+        return
+
+    print(f"\nLoan history for {member.member_name}:")
+    print(40 * "_")
+
+    for loan in loans:
+        print(f"Loan ID: {loan.loan_id}")
+        print(f"Equipment ID: {loan.equipment_id}")
+        print(f"Checkout Date: {loan.checkout_date}")
+        print(f"Return Date: {loan.return_date}")
+        print(f"Status: {loan.status}")
+        print(40 * "_")
+
 def currently_borrowed():
     results = currently_borrowed_equipments()
     if not results:
@@ -113,7 +157,7 @@ def register_member():
 
 def list_members():
     members = get_members()
-
+    print("===== MAKERSPACE MEMBERS=====")
     for member in members:
         member.display_info()
 
@@ -176,7 +220,7 @@ def register_equipment():
 
 def list_equipment():
     equipment = get_equipment()
-
+    print("===== MAKERSPACE EQUIPMENT =====")
     for tool in equipment:
         tool.display_info()
 
@@ -194,8 +238,9 @@ def main():
             print("\tMAKERSPACE CHECKOUT SYSTEM")
             print(40*"=")
             print("1. Register member\n2. List members\n3. Update member\n4. Register equipment")
-            print("5. List equipment\n6. Checkout equipment")
-            print("7. Return equipment\n8. Search equipment\n9. Currently borrowed equipments\n10. Loan history\n11. Exit")
+            print("5. List equipment\n6. Checkout equipment\n7. Return equipment\n8. Search equipment")
+            print("9. Search member\n10. Search loan by member\n11. Currently borrowed equipments")
+            print("12. Loan history\n13. Clear loan history\n14. Exit")
 
             try:
                 choice = int(input("Enter your choice: "))
@@ -219,10 +264,16 @@ def main():
             elif choice == 8:
                 search()
             elif choice == 9:
-                currently_borrowed()
+                search_member_menu()
             elif choice == 10:
-                loan_history()
+                search_loan_member()
             elif choice == 11:
+                currently_borrowed()
+            elif choice == 12:
+                loan_history()
+            elif choice == 13:
+                clear_history()
+            elif choice == 14:
                 print("Thank you for using our services!")
                 break
             else:
