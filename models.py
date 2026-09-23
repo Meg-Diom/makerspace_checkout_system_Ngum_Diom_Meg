@@ -10,8 +10,7 @@ class Member:
     def display_info(self):
         print(f"Name: {self.member_name}\nEmail: {self.email}")
 
-    def update_details(self, new_name, new_email
-    ):
+    def update_details(self, new_name, new_email):
         self.member_name = new_name
         self.email = new_email
         print("Member updated successfully!")
